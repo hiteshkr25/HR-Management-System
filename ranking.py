@@ -1,6 +1,6 @@
 """
 Smart Ranking Algorithm for HR Management System
-Weighted scoring: 50% skill match + 30% GPA + 20% branch relevance
+Weighted scoring: 50% skill match + 30% CGPA + 20% branch relevance
 """
 
 def calculate_fit_score(student, job_request):
@@ -8,8 +8,8 @@ def calculate_fit_score(student, job_request):
     Calculate fit score (0-100) for a student based on job requirements
     
     Args:
-        student: dict with keys: skills, gpa, branch
-        job_request: dict with keys: required_skills, min_gpa, branch_pref
+        student: dict with keys: skills, cgpa, branch
+        job_request: dict with keys: required_skills, min_cgpa, branch_pref
     
     Returns:
         tuple: (fit_score, skill_score) - fit score and skill match score
@@ -20,10 +20,10 @@ def calculate_fit_score(student, job_request):
         job_request['required_skills'].lower()
     )
     
-    # 2. GPA Score (30% weight)
+    # 2. CGPA Score (30% weight)
     gpa_score = calculate_gpa_score(
-        student['gpa'],
-        job_request['min_gpa']
+        student['cgpa'],
+        job_request['min_cgpa']
     )
     
     # 3. Branch Relevance Score (20% weight)
@@ -73,7 +73,7 @@ def calculate_skill_match(student_skills, required_skills):
 
 def calculate_gpa_score(student_gpa, min_gpa):
     """
-    Calculate GPA score
+    Calculate CGPA score (out of 10)
     Returns 0 if below minimum, scales from 0-100 based on how much above minimum
     """
     # Convert Decimal to float to avoid type mixing issues
@@ -83,13 +83,13 @@ def calculate_gpa_score(student_gpa, min_gpa):
     if student_gpa < min_gpa:
         return 0
     
-    # If GPA meets minimum, score based on excellence above minimum
-    # Score = 50 (base for meeting minimum) + 50 * ((current - min) / (4.0 - min))
-    if min_gpa >= 4.0:
+    # If CGPA meets minimum, score based on excellence above minimum
+    # Score = 50 (base for meeting minimum) + 50 * ((current - min) / (10.0 - min))
+    if min_gpa >= 10.0:
         return 100
     
     base_score = 50
-    excellence_score = ((student_gpa - min_gpa) / (4.0 - min_gpa)) * 50
+    excellence_score = ((student_gpa - min_gpa) / (10.0 - min_gpa)) * 50
     
     return min(100, base_score + excellence_score)
 

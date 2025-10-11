@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS student (
     student_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     branch VARCHAR(100) NOT NULL,
-    gpa DECIMAL(3, 2) NOT NULL CHECK (gpa >= 0 AND gpa <= 4.0),
+    cgpa DECIMAL(4, 2) NOT NULL CHECK (cgpa >= 0 AND cgpa <= 10.0),
     email VARCHAR(255) UNIQUE NOT NULL,
     phone VARCHAR(20),
     skills TEXT NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS job_request (
     recruiter_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     company_name VARCHAR(255) NOT NULL,
     required_skills TEXT NOT NULL,
-    min_gpa DECIMAL(3, 2) NOT NULL CHECK (min_gpa >= 0 AND min_gpa <= 4.0),
+    min_cgpa DECIMAL(4, 2) NOT NULL CHECK (min_cgpa >= 0 AND min_cgpa <= 10.0),
     branch_pref VARCHAR(100),
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

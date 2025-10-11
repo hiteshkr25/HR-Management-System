@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <p><strong>Minimum GPA:</strong> {{ job.min_gpa }}</p>
+                            <p><strong>Minimum CGPA:</strong> {{ job.min_cgpa }}</p>
                         </div>
                         <div class="col-md-3">
                             <p><strong>Branch Preference:</strong> {{ job.branch_pref or 'Any' }}</p>
@@ -71,7 +71,7 @@
                                 <th>Fit Score</th>
                                 <th>Name</th>
                                 <th>Branch</th>
-                                <th>GPA</th>
+                                <th>CGPA</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Skills</th>
@@ -89,7 +89,7 @@
                                 </td>
                                 <td><strong>{{ item.name }}</strong></td>
                                 <td><span class="badge bg-secondary">{{ item.branch }}</span></td>
-                                <td><strong>{{ item.gpa }}</strong></td>
+                                <td><strong>{{ item.cgpa }}</strong></td>
                                 <td>{{ item.email }}</td>
                                 <td>{{ item.phone }}</td>
                                 <td>
@@ -113,7 +113,7 @@
                 </div>
                 <div class="alert alert-info mt-3">
                     <i class="fas fa-info-circle"></i> 
-                    <strong>Fit Score Calculation:</strong> 50% Skills Match + 30% GPA + 20% Branch Relevance
+                    <strong>Fit Score Calculation:</strong> 50% Skills Match + 30% CGPA + 20% Branch Relevance
                 </div>
             {% else %}
                 <p class="text-muted">No candidates match the criteria for this job.</p>

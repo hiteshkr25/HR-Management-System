@@ -24,7 +24,7 @@
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header">
-                    <i class="fas fa-chart-line"></i> GPA Distribution
+                    <i class="fas fa-chart-line"></i> CGPA Distribution
                 </div>
                 <div class="card-body">
                     <canvas id="gpaChart"></canvas>
@@ -74,15 +74,15 @@ const branchChart = new Chart(branchCtx, {
     }
 });
 
-// GPA Distribution Chart
+// CGPA Distribution Chart
 const gpaCtx = document.getElementById('gpaChart').getContext('2d');
 const gpaChart = new Chart(gpaCtx, {
     type: 'bar',
     data: {
-        labels: [{% for item in gpa_data %}'{{ item.gpa_range }}',{% endfor %}],
+        labels: [{% for item in cgpa_data %}'{{ item.cgpa_range }}',{% endfor %}],
         datasets: [{
             label: 'Number of Students',
-            data: [{% for item in gpa_data %}{{ item.count }},{% endfor %}],
+            data: [{% for item in cgpa_data %}{{ item.count }},{% endfor %}],
             backgroundColor: '#DC143C'
         }]
     },

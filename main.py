@@ -167,8 +167,8 @@ def hr_dashboard():
     cur.execute("SELECT COUNT(*) as count FROM notifications WHERE user_id = %s AND is_read = FALSE", (session['user_id'],))
     unread_notifications = cur.fetchone()['count']
     
-    cur.execute("SELECT AVG(gpa) as avg_gpa FROM student")
-    avg_gpa = cur.fetchone()['avg_gpa'] or 0
+    cur.execute("SELECT AVG(cgpa) as avg_cgpa FROM student")
+    avg_cgpa = cur.fetchone()['avg_cgpa'] or 0
     
     # Recent notifications
     cur.execute("""
@@ -186,7 +186,7 @@ def hr_dashboard():
                          total_students=total_students,
                          total_jobs=total_jobs,
                          unread_notifications=unread_notifications,
-                         avg_gpa=round(avg_gpa, 2),
+                         avg_cgpa=round(avg_cgpa, 2),
                          notifications=notifications)
 
 
@@ -197,7 +197,7 @@ def hr_students():
     """View all students"""
     conn = get_db()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM student ORDER BY gpa DESC")
+    cur.execute("SELECT * FROM student ORDER BY cgpa DESC")
     students = cur.fetchall()
     cur.close()
     conn.close()
@@ -213,7 +213,7 @@ def hr_add_student():
     if request.method == 'POST':
         name = request.form.get('name')
         branch = request.form.get('branch')
-        gpa = float(request.form.get('gpa'))
+        cgpa = float(request.form.get('cgpa'))
         email = request.form.get('email')
         phone = request.form.get('phone')
         skills = request.form.get('skills')
@@ -222,9 +222,9 @@ def hr_add_student():
             conn = get_db()
             cur = conn.cursor()
             cur.execute("""
-                INSERT INTO student (name, branch, gpa, email, phone, skills)
+                INSERT INTO student (name, branch, cgpa, email, phone, skills)
                 VALUES (%s, %s, %s, %s, %s, %s)
-            """, (name, branch, gpa, email, phone, skills))
+            """, (name, branch, cgpa, email, phone, skills))
             conn.commit()
             cur.close()
             conn.close()
@@ -248,16 +248,16 @@ def hr_edit_student(student_id):
     if request.method == 'POST':
         name = request.form.get('name')
         branch = request.form.get('branch')
-        gpa = float(request.form.get('gpa'))
+        cgpa = float(request.form.get('cgpa'))
         email = request.form.get('email')
         phone = request.form.get('phone')
         skills = request.form.get('skills')
         
         cur.execute("""
             UPDATE student 
-            SET name=%s, branch=%s, gpa=%s, email=%s, phone=%s, skills=%s
+            SET name=%s, branch=%s, cgpa=%s, email=%s, phone=%s, skills=%s
             WHERE student_id=%s
-        """, (name, branch, gpa, email, phone, skills, student_id))
+        """, (name, branch, cgpa, email, phone, skills, student_id))
         conn.commit()
         cur.close()
         conn.close()
@@ -372,21 +372,21 @@ def hr_analytics():
     """)
     branch_data = cur.fetchall()
     
-    # GPA distribution
+    # CGPA distribution
     cur.execute("""
         SELECT 
             CASE 
-                WHEN gpa >= 3.5 THEN '3.5-4.0'
-                WHEN gpa >= 3.0 THEN '3.0-3.5'
-                WHEN gpa >= 2.5 THEN '2.5-3.0'
-                ELSE 'Below 2.5'
-            END as gpa_range,
+                WHEN cgpa >= 9.0 THEN '9.0-10.0'
+                WHEN cgpa >= 8.0 THEN '8.0-9.0'
+                WHEN cgpa >= 7.0 THEN '7.0-8.0'
+                ELSE 'Below 7.0'
+            END as cgpa_range,
             COUNT(*) as count
         FROM student
-        GROUP BY gpa_range
-        ORDER BY gpa_range DESC
+        GROUP BY cgpa_range
+        ORDER BY cgpa_range DESC
     """)
-    gpa_data = cur.fetchall()
+    cgpa_data = cur.fetchall()
     
     # Top skills
     cur.execute("SELECT skills FROM student")
@@ -405,7 +405,7 @@ def hr_analytics():
     
     return render_template('hr_analytics.html',
                          branch_data=branch_data,
-                         gpa_data=gpa_data,
+                         cgpa_data=cgpa_data,
                          top_skills=top_skills)
 
 
@@ -452,7 +452,7 @@ def recruiter_post_job():
     if request.method == 'POST':
         company_name = request.form.get('company_name')
         required_skills = request.form.get('required_skills')
-        min_gpa = float(request.form.get('min_gpa'))
+        min_cgpa = float(request.form.get('min_cgpa'))
         branch_pref = request.form.get('branch_pref')
         description = request.form.get('description')
         
@@ -461,10 +461,10 @@ def recruiter_post_job():
         
         # Insert job
         cur.execute("""
-            INSERT INTO job_request (recruiter_id, company_name, required_skills, min_gpa, branch_pref, description)
+            INSERT INTO job_request (recruiter_id, company_name, required_skills, min_cgpa, branch_pref, description)
             VALUES (%s, %s, %s, %s, %s, %s)
             RETURNING job_id
-        """, (session['user_id'], company_name, required_skills, min_gpa, branch_pref, description))
+        """, (session['user_id'], company_name, required_skills, min_cgpa, branch_pref, description))
         
         job_id = cur.fetchone()['job_id']
         
@@ -526,7 +526,7 @@ def recruiter_shortlist(job_id):
     
     # Get saved shortlist with latest resume per student (no duplicates)
     cur.execute("""
-        SELECT s.*, st.name, st.email, st.branch, st.gpa, st.skills, st.phone,
+        SELECT s.*, st.name, st.email, st.branch, st.cgpa, st.skills, st.phone,
                latest_resume.resume_file, latest_resume.resume_id
         FROM shortlist s
         JOIN student st ON s.student_id = st.student_id
@@ -629,7 +629,7 @@ def export_shortlist(job_id):
     cur = conn.cursor()
     
     cur.execute("""
-        SELECT st.name, st.email, st.phone, st.branch, st.gpa, st.skills, s.fit_score
+        SELECT st.name, st.email, st.phone, st.branch, st.cgpa, st.skills, s.fit_score
         FROM shortlist s
         JOIN student st ON s.student_id = st.student_id
         WHERE s.job_id = %s
@@ -643,11 +643,11 @@ def export_shortlist(job_id):
     # Create CSV
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(['Name', 'Email', 'Phone', 'Branch', 'GPA', 'Skills', 'Fit Score'])
+    writer.writerow(['Name', 'Email', 'Phone', 'Branch', 'CGPA', 'Skills', 'Fit Score'])
     
     for row in shortlist:
         writer.writerow([row['name'], row['email'], row['phone'], row['branch'], 
-                        row['gpa'], row['skills'], row['fit_score']])
+                        row['cgpa'], row['skills'], row['fit_score']])
     
     output.seek(0)
     return send_file(

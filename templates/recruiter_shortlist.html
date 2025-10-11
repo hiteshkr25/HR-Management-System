@@ -75,6 +75,7 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Skills</th>
+                                <th>Resume</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,6 +96,15 @@
                                     {% for skill in item.skills.split(',')[:4] %}
                                         <span class="skill-badge">{{ skill.strip() }}</span>
                                     {% endfor %}
+                                </td>
+                                <td>
+                                    {% if item.resume_file %}
+                                        <a href="{{ url_for('view_resume', student_id=item.student_id) }}" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-file-pdf"></i> View PDF
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}

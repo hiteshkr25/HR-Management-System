@@ -511,24 +511,32 @@ def recruiter_shortlist(job_id):
     # Rank students
     ranked_students = rank_students(students, job)
     
-    # Save shortlist to database (only students with fit_score > 0)
-    # Update scores if already exists to keep rankings current
-    for student, fit_score in ranked_students:
-        if fit_score > 0:
+    # Clear existing shortlist for this job to ensure fresh ranking
+    cur.execute("DELETE FROM shortlist WHERE job_id = %s", (job_id,))
+    
+    # Save shortlist to database (only students with at least one skill match)
+    for student, fit_score, skill_score in ranked_students:
+        if skill_score > 0:  # Only shortlist if student has at least one matching skill
             cur.execute("""
                 INSERT INTO shortlist (job_id, student_id, fit_score)
                 VALUES (%s, %s, %s)
-                ON CONFLICT (job_id, student_id) 
-                DO UPDATE SET fit_score = EXCLUDED.fit_score
             """, (job_id, student['student_id'], fit_score))
     
     conn.commit()
     
-    # Get saved shortlist
+    # Get saved shortlist with latest resume per student (no duplicates)
     cur.execute("""
-        SELECT s.*, st.name, st.email, st.branch, st.gpa, st.skills, st.phone
+        SELECT s.*, st.name, st.email, st.branch, st.gpa, st.skills, st.phone,
+               latest_resume.resume_file, latest_resume.resume_id
         FROM shortlist s
         JOIN student st ON s.student_id = st.student_id
+        LEFT JOIN LATERAL (
+            SELECT resume_file, resume_id
+            FROM resume
+            WHERE student_id = st.student_id
+            ORDER BY uploaded_at DESC
+            LIMIT 1
+        ) latest_resume ON true
         WHERE s.job_id = %s
         ORDER BY s.fit_score DESC
     """, (job_id,))
@@ -662,6 +670,37 @@ def mark_notification_read(notif_id):
     conn.close()
     
     return redirect(request.referrer or url_for('hr_dashboard'))
+
+
+@app.route('/view-resume/<int:student_id>')
+@login_required
+def view_resume(student_id):
+    """View/Download student resume"""
+    conn = get_db()
+    cur = conn.cursor()
+    
+    cur.execute("""
+        SELECT resume_file FROM resume 
+        WHERE student_id = %s 
+        ORDER BY uploaded_at DESC 
+        LIMIT 1
+    """, (student_id,))
+    resume = cur.fetchone()
+    
+    cur.close()
+    conn.close()
+    
+    if not resume:
+        flash('No resume found for this student!', 'warning')
+        return redirect(request.referrer or url_for('hr_students'))
+    
+    resume_path = os.path.join(app.config['UPLOAD_FOLDER'], resume['resume_file'])
+    
+    if not os.path.exists(resume_path):
+        flash('Resume file not found!', 'danger')
+        return redirect(request.referrer or url_for('hr_students'))
+    
+    return send_file(resume_path, as_attachment=False)
 
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ def calculate_fit_score(student, job_request):
         job_request: dict with keys: required_skills, min_gpa, branch_pref
     
     Returns:
-        float: fit score between 0 and 100
+        tuple: (fit_score, skill_score) - fit score and skill match score
     """
     # 1. Skill Match Score (50% weight)
     skill_score = calculate_skill_match(
@@ -35,7 +35,7 @@ def calculate_fit_score(student, job_request):
     # Calculate weighted total
     fit_score = (skill_score * 0.5) + (gpa_score * 0.3) + (branch_score * 0.2)
     
-    return round(fit_score, 2)
+    return round(fit_score, 2), skill_score
 
 
 def calculate_skill_match(student_skills, required_skills):
@@ -133,13 +133,13 @@ def rank_students(students, job_request):
         job_request: dict with job requirements
     
     Returns:
-        list of tuples (student, fit_score) sorted by fit_score descending
+        list of tuples (student, fit_score, skill_score) sorted by fit_score descending
     """
     ranked = []
     
     for student in students:
-        fit_score = calculate_fit_score(student, job_request)
-        ranked.append((student, fit_score))
+        fit_score, skill_score = calculate_fit_score(student, job_request)
+        ranked.append((student, fit_score, skill_score))
     
     # Sort by fit_score descending
     ranked.sort(key=lambda x: x[1], reverse=True)

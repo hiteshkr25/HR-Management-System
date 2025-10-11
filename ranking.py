@@ -76,6 +76,10 @@ def calculate_gpa_score(student_gpa, min_gpa):
     Calculate GPA score
     Returns 0 if below minimum, scales from 0-100 based on how much above minimum
     """
+    # Convert Decimal to float to avoid type mixing issues
+    student_gpa = float(student_gpa)
+    min_gpa = float(min_gpa)
+    
     if student_gpa < min_gpa:
         return 0
     

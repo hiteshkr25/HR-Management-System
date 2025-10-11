@@ -179,8 +179,4 @@ The application uses a professional **Crimson (#DC143C)** color palette:
 - Dark: `#A0102A`
 - Light: `#FF6B8A`
 
-## Support
 
-Built for Replit with ❤️
-
-**Tagline**: Smart Recruitment, Simplified.

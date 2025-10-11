@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS shortlist (
     student_id INTEGER REFERENCES student(student_id) ON DELETE CASCADE,
     fit_score DECIMAL(5, 2) NOT NULL,
     status VARCHAR(20) DEFAULT 'Shortlisted' CHECK (status IN ('Shortlisted', 'Selected', 'Rejected')),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(job_id, student_id)
 );
 
 -- Notifications table

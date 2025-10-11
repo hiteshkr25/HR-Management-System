@@ -48,7 +48,18 @@
 
     <div class="card">
         <div class="card-header">
-            <i class="fas fa-users"></i> Shortlisted Candidates (Ranked by Fit Score)
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-users"></i> Shortlisted Candidates (Ranked by Fit Score)
+                </div>
+                {% if shortlist %}
+                <form method="POST" action="{{ url_for('send_emails_to_shortlist', job_id=job.job_id) }}" style="margin: 0;">
+                    <button type="submit" class="btn btn-light btn-sm" onclick="return confirm('Send email notifications to all {{ shortlist|length }} shortlisted students?')">
+                        <i class="fas fa-envelope"></i> Send Email Notifications
+                    </button>
+                </form>
+                {% endif %}
+            </div>
         </div>
         <div class="card-body">
             {% if shortlist %}

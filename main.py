@@ -9,6 +9,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 from ranking import calculate_fit_score, rank_students
+from email_service import send_shortlist_email, send_bulk_emails, is_email_configured
 
 load_dotenv()
 
@@ -511,12 +512,14 @@ def recruiter_shortlist(job_id):
     ranked_students = rank_students(students, job)
     
     # Save shortlist to database (only students with fit_score > 0)
+    # Update scores if already exists to keep rankings current
     for student, fit_score in ranked_students:
         if fit_score > 0:
             cur.execute("""
                 INSERT INTO shortlist (job_id, student_id, fit_score)
                 VALUES (%s, %s, %s)
-                ON CONFLICT DO NOTHING
+                ON CONFLICT (job_id, student_id) 
+                DO UPDATE SET fit_score = EXCLUDED.fit_score
             """, (job_id, student['student_id'], fit_score))
     
     conn.commit()
@@ -554,6 +557,58 @@ def recruiter_my_jobs():
     conn.close()
     
     return render_template('recruiter_my_jobs.html', jobs=jobs)
+
+
+@app.route('/recruiter/send-emails/<int:job_id>', methods=['POST'])
+@login_required
+@role_required('Recruiter')
+def send_emails_to_shortlist(job_id):
+    """Send email notifications to all shortlisted students for a job"""
+    conn = get_db()
+    cur = conn.cursor()
+    
+    # Get job details
+    cur.execute("SELECT * FROM job_request WHERE job_id = %s AND recruiter_id = %s", 
+                (job_id, session['user_id']))
+    job = cur.fetchone()
+    
+    if not job:
+        flash('Job not found or access denied!', 'danger')
+        return redirect(url_for('recruiter_dashboard'))
+    
+    # Check if email is configured
+    if not is_email_configured():
+        flash('Email service not configured! Please add email credentials to Secrets (MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD).', 'warning')
+        return redirect(url_for('recruiter_shortlist', job_id=job_id))
+    
+    # Get shortlisted students
+    cur.execute("""
+        SELECT st.name, st.email
+        FROM shortlist s
+        JOIN student st ON s.student_id = st.student_id
+        WHERE s.job_id = %s
+        ORDER BY s.fit_score DESC
+    """, (job_id,))
+    students = cur.fetchall()
+    
+    cur.close()
+    conn.close()
+    
+    if not students:
+        flash('No students in shortlist!', 'warning')
+        return redirect(url_for('recruiter_shortlist', job_id=job_id))
+    
+    # Send emails
+    results = send_bulk_emails(
+        students,
+        job['company_name'],
+        job['description']
+    )
+    
+    flash(f"Email notifications sent! Success: {results['success']}, Failed: {results['failed']}", 
+          'success' if results['failed'] == 0 else 'warning')
+    
+    return redirect(url_for('recruiter_shortlist', job_id=job_id))
 
 
 # ==================== UTILITY ROUTES ====================

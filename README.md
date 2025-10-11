@@ -163,6 +163,15 @@ Required environment variables (auto-configured on Replit):
 - `DATABASE_URL` - PostgreSQL connection string
 - `SESSION_SECRET` - Flask session secret key
 
+Optional environment variables (for email notifications):
+- `MAIL_SERVER` - SMTP server (e.g., smtp.gmail.com)
+- `MAIL_PORT` - SMTP port (e.g., 587)
+- `MAIL_USERNAME` - Email account username
+- `MAIL_PASSWORD` - Email account password (use app password for Gmail)
+- `MAIL_FROM` - From email address
+
+**Note**: The system works fully without email configuration. Email notifications will simply show a message indicating they need to be configured in Secrets.
+
 ## Color Theme
 
 The application uses a professional **Crimson (#DC143C)** color palette:

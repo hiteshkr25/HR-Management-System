@@ -65,14 +65,31 @@ None specified yet.
 - **Database**: PostgreSQL (development instance)
 - **Workflow**: `python main.py` configured to run on startup
 
+## Email Notification System
+
+**Status**: Implemented with optional SMTP configuration
+
+The system includes a complete email notification service (`email_service.py`) that allows recruiters to send professional HTML emails to all shortlisted students with one click.
+
+**How to enable**:
+1. Add email credentials to Replit Secrets:
+   - `MAIL_SERVER` (e.g., smtp.gmail.com)
+   - `MAIL_PORT` (e.g., 587)
+   - `MAIL_USERNAME`
+   - `MAIL_PASSWORD` (use app-specific password for Gmail)
+   - `MAIL_FROM` (optional)
+
+2. Recruiters can then use the "Send Email Notifications" button on the shortlist page
+
+**Note**: The user dismissed the Resend integration setup. If they want to use Resend in the future instead of manual SMTP, they can set up the Resend connector through the integrations panel.
+
 ## Next Steps / Future Enhancements
 
-1. **Email Integration**: Set up Resend/SendGrid for automated emails to shortlisted students
-2. **AI Upgrade**: Replace basic ranking with Sentence-BERT for semantic matching
-3. **Enhanced Analytics**: Add trend charts and historical recruitment data
-4. **Bulk Import**: CSV/Excel upload for student records
-5. **Student Profiles**: Detailed pages with resume preview
-6. **Advanced Search**: Filtering across students and jobs
+1. **AI Upgrade**: Replace basic ranking with Sentence-BERT for semantic matching
+2. **Enhanced Analytics**: Add trend charts and historical recruitment data
+3. **Bulk Import**: CSV/Excel upload for student records
+4. **Student Profiles**: Detailed pages with resume preview
+5. **Advanced Search**: Filtering across students and jobs
 
 ## Notes
 

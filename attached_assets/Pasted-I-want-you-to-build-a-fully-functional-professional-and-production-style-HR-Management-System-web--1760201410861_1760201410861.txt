@@ -1,0 +1,173 @@
+I want you to build a fully functional, professional, and production-style HR Management System web application using Python (Flask) and MySQL, fully runnable on Replit.
+
+The web app should be modern, responsive, and visually appealing — designed like a real corporate system with clear navigation, elegant dashboards, consistent layouts, and a professional Crimson (#DC143C) color palette. The entire project must be coded in Python using Flask and follow clean folder structuring, modular code, and proper comments.
+
+Core Requirements
+
+The system should have two main user roles:
+
+HR
+
+Recruiter
+
+Additionally, include a registration page so that both HR and Recruiter can create accounts before logging in.
+
+The website must include:
+
+A Login page and Registration page with form validation and password hashing (Flask-Bcrypt).
+
+A Dashboard for each role (HR and Recruiter) with intuitive navigation and dynamic content.
+
+HR Module for managing student records, uploading resumes, viewing analytics, and handling recruiter requests.
+
+Recruiter Module for posting job requirements, viewing ranked candidates, and sending notifications.
+
+HR Module Features
+
+Login and registration with secure authentication.
+
+Dashboard showing quick stats and analytics charts.
+
+Manage student records:
+
+Add, update, delete, and view students.
+
+Fields: Name, Branch, GPA, Email, Phone, and Skills.
+
+Upload resumes (PDF/DOCX) stored in an /uploads folder with secure validation.
+
+View all recruiter job requests.
+
+Analytics dashboard using Chart.js displaying:
+
+Average GPA of shortlisted students.
+
+Number of students per branch.
+
+Top 5 most common skills.
+
+Option to export shortlisted students as a CSV or Excel file.
+
+View notifications when a recruiter posts a new job.
+
+Recruiter Module Features
+
+Login and registration with authentication.
+
+Post new job requirements (skills, branch preference, GPA threshold, description).
+
+Automatically trigger notifications to HR when a job is posted.
+
+View a ranked shortlist of students based on AI Fit Scores.
+
+Select students from the list to send automatic email notifications.
+
+AI Ranking System
+
+Use an AI-based Fit Score (0–100) to rank students for each job request.
+
+Weighted criteria:
+
+Skill match: 50%
+
+GPA threshold: 30%
+
+Branch relevance: 20%
+
+Implement using the Sentence-BERT MiniLM model (all-MiniLM-L6-v2) from the sentence-transformers library.
+
+The AI should calculate similarity between recruiter job descriptions and student skills or resumes, then generate a ranked list in descending order.
+
+Email Notification System
+
+Use Flask-Mail with SMTP integration (Gmail or other services) to automatically send emails to shortlisted students.
+
+Use environment variables for credentials (MAIL_USERNAME, MAIL_PASSWORD, etc.).
+
+Email template example:
+
+Subject: Shortlist Notification – [Company]
+Dear [Student Name],
+Congratulations! You have been shortlisted for the role posted by [Company]. Please wait for further instructions.
+
+Frontend and Design
+
+The website should have a modern, professional UI:
+
+Use Bootstrap 5 for responsive layout.
+
+Use Crimson (#DC143C) as the primary color for buttons, headers, and highlights.
+
+Include well-structured navigation bars, side menus, and cards for displaying information.
+
+Ensure consistent spacing, padding, and clean typography.
+
+Add relevant icons using FontAwesome or Lucide for visual clarity.
+
+Include a clean, well-designed homepage with branding and a short tagline like “Smart Recruitment, Simplified.”
+
+Every page should have a clear header, footer, and proper structure.
+
+Ensure both dashboards (HR and Recruiter) are filled with useful widgets, charts, and data tables.
+
+Database Design (MySQL)
+
+Create SQL tables:
+
+Users – (user_id, username, email, password, role {HR, Recruiter})
+
+Student – (student_id, name, branch, gpa, email, phone, skills)
+
+Resume – (resume_id, student_id, resume_file)
+
+Job_Request – (job_id, recruiter_id, required_skills, min_gpa, branch_pref, description, created_at)
+
+Shortlist – (shortlist_id, job_id, student_id, fit_score, status {Shortlisted, Selected, Rejected})
+
+Notifications – (notif_id, recruiter_id, message, created_at)
+
+Include SQL relationships and foreign keys. Provide the schema.sql file with sample data.
+
+Technical Setup (for Replit)
+
+Language: Python 3
+
+Framework: Flask
+
+Database: MySQL (via Neon or remote connector)
+
+AI: SentenceTransformers (MiniLM model)
+
+Mail: Flask-Mail (SMTP)
+
+Auth: Flask-Bcrypt
+
+Visualization: Chart.js
+
+Styling: Bootstrap 5 + Custom CSS
+
+Include the following files:
+
+main.py (Flask entry point)
+
+schema.sql
+
+requirements.txt
+
+.env.example
+
+/templates (HTML pages: login, register, HR dashboard, recruiter dashboard, shortlist, base.html)
+
+/static (CSS + JS files, with style.css using Crimson theme)
+
+/uploads (for resume storage)
+
+/ai/ai_ranking.py (AI Fit Score logic)
+
+README.md (with setup guide for Replit)
+
+Environment Variables (Replit Secrets)
+
+Add these in Replit’s Secrets tab:
+
+DB_URL – MySQL connection string...

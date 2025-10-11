@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Student - HR Management System{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="fas fa-edit"></i> Edit Student</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('hr_edit_student', student_id=student.student_id) }}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ student.name }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="branch" class="form-label">Branch</label>
+                                <select class="form-select" id="branch" name="branch" required>
+                                    <option value="Computer Science" {% if student.branch == 'Computer Science' %}selected{% endif %}>Computer Science</option>
+                                    <option value="Information Technology" {% if student.branch == 'Information Technology' %}selected{% endif %}>Information Technology</option>
+                                    <option value="Electronics" {% if student.branch == 'Electronics' %}selected{% endif %}>Electronics</option>
+                                    <option value="Mechanical" {% if student.branch == 'Mechanical' %}selected{% endif %}>Mechanical</option>
+                                    <option value="Electrical" {% if student.branch == 'Electrical' %}selected{% endif %}>Electrical</option>
+                                    <option value="Civil" {% if student.branch == 'Civil' %}selected{% endif %}>Civil</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="gpa" class="form-label">GPA</label>
+                                <input type="number" step="0.01" min="0" max="4.0" class="form-control" id="gpa" name="gpa" value="{{ student.gpa }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ student.email }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="text" class="form-control" id="phone" name="phone" value="{{ student.phone }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="skills" class="form-label">Skills (comma-separated)</label>
+                            <textarea class="form-control" id="skills" name="skills" rows="3" required>{{ student.skills }}</textarea>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('hr_students') }}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-crimson">
+                                <i class="fas fa-save"></i> Update Student
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

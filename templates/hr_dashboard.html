@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}HR Dashboard - HR Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-chart-line"></i> HR Dashboard</h2>
+        <p class="mb-0">Welcome back, {{ session.username }}!</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="stat-label">Total Students</div>
+                    <div class="stat-value">{{ total_students }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="stat-label">Job Requests</div>
+                    <div class="stat-value">{{ total_jobs }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="stat-label">Average GPA</div>
+                    <div class="stat-value">{{ avg_gpa }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="stat-label">Notifications</div>
+                    <div class="stat-value">{{ unread_notifications }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-bell"></i> Recent Notifications
+                </div>
+                <div class="card-body">
+                    {% if notifications %}
+                        <div class="list-group">
+                            {% for notif in notifications %}
+                                <div class="list-group-item {% if not notif.is_read %}fw-bold{% endif %}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <i class="fas fa-info-circle text-primary me-2"></i>
+                                            {{ notif.message }}
+                                            <br>
+                                            <small class="text-muted">{{ notif.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                        </div>
+                                        {% if not notif.is_read %}
+                                            <a href="{{ url_for('mark_notification_read', notif_id=notif.notif_id) }}" 
+                                               class="btn btn-sm btn-outline-secondary">
+                                                Mark Read
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No notifications yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-rocket"></i> Quick Actions
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('hr_add_student') }}" class="btn btn-crimson">
+                            <i class="fas fa-user-plus"></i> Add Student
+                        </a>
+                        <a href="{{ url_for('hr_students') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-users"></i> View All Students
+                        </a>
+                        <a href="{{ url_for('hr_jobs') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-briefcase"></i> View Job Requests
+                        </a>
+                        <a href="{{ url_for('hr_analytics') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-chart-bar"></i> Analytics Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

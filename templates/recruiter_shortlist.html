@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Shortlist - HR Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2><i class="fas fa-list-ol"></i> Ranked Shortlist</h2>
+                <p class="mb-0">{{ job.company_name }} - Job #{{ job.job_id }}</p>
+            </div>
+            <a href="{{ url_for('export_shortlist', job_id=job.job_id) }}" class="btn btn-light">
+                <i class="fas fa-download"></i> Export CSV
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-info-circle"></i> Job Details
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Required Skills:</strong></p>
+                            <div class="mb-2">
+                                {% for skill in job.required_skills.split(',') %}
+                                    <span class="skill-badge">{{ skill.strip() }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <p><strong>Minimum GPA:</strong> {{ job.min_gpa }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p><strong>Branch Preference:</strong> {{ job.branch_pref or 'Any' }}</p>
+                        </div>
+                    </div>
+                    <p><strong>Description:</strong></p>
+                    <p class="text-muted">{{ job.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-users"></i> Shortlisted Candidates (Ranked by Fit Score)
+        </div>
+        <div class="card-body">
+            {% if shortlist %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Fit Score</th>
+                                <th>Name</th>
+                                <th>Branch</th>
+                                <th>GPA</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Skills</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in shortlist %}
+                            <tr>
+                                <td><strong>#{{ loop.index }}</strong></td>
+                                <td>
+                                    <span class="fit-score {% if item.fit_score >= 70 %}fit-score-high{% elif item.fit_score >= 40 %}fit-score-medium{% else %}fit-score-low{% endif %}">
+                                        {{ item.fit_score }}%
+                                    </span>
+                                </td>
+                                <td><strong>{{ item.name }}</strong></td>
+                                <td><span class="badge bg-secondary">{{ item.branch }}</span></td>
+                                <td><strong>{{ item.gpa }}</strong></td>
+                                <td>{{ item.email }}</td>
+                                <td>{{ item.phone }}</td>
+                                <td>
+                                    {% for skill in item.skills.split(',')[:4] %}
+                                        <span class="skill-badge">{{ skill.strip() }}</span>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Fit Score Calculation:</strong> 50% Skills Match + 30% GPA + 20% Branch Relevance
+                </div>
+            {% else %}
+                <p class="text-muted">No candidates match the criteria for this job.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

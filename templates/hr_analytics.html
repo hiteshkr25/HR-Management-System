@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - HR Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <h2><i class="fas fa-chart-bar"></i> Analytics Dashboard</h2>
+        <p class="mb-0">Comprehensive insights into student data</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-graduation-cap"></i> Students by Branch
+                </div>
+                <div class="card-body">
+                    <canvas id="branchChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-line"></i> GPA Distribution
+                </div>
+                <div class="card-body">
+                    <canvas id="gpaChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-trophy"></i> Top 10 Skills
+                </div>
+                <div class="card-body">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Students by Branch Chart
+const branchCtx = document.getElementById('branchChart').getContext('2d');
+const branchChart = new Chart(branchCtx, {
+    type: 'pie',
+    data: {
+        labels: [{% for item in branch_data %}'{{ item.branch }}',{% endfor %}],
+        datasets: [{
+            data: [{% for item in branch_data %}{{ item.count }},{% endfor %}],
+            backgroundColor: [
+                '#DC143C', '#FF6B8A', '#A0102A', '#FF8DA1', '#800D24',
+                '#FFA4B8', '#600A1B'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// GPA Distribution Chart
+const gpaCtx = document.getElementById('gpaChart').getContext('2d');
+const gpaChart = new Chart(gpaCtx, {
+    type: 'bar',
+    data: {
+        labels: [{% for item in gpa_data %}'{{ item.gpa_range }}',{% endfor %}],
+        datasets: [{
+            label: 'Number of Students',
+            data: [{% for item in gpa_data %}{{ item.count }},{% endfor %}],
+            backgroundColor: '#DC143C'
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Top Skills Chart
+const skillsCtx = document.getElementById('skillsChart').getContext('2d');
+const skillsChart = new Chart(skillsCtx, {
+    type: 'horizontalBar',
+    data: {
+        labels: [{% for skill, count in top_skills %}'{{ skill }}',{% endfor %}],
+        datasets: [{
+            label: 'Frequency',
+            data: [{% for skill, count in top_skills %}{{ count }},{% endfor %}],
+            backgroundColor: '#DC143C'
+        }]
+    },
+    options: {
+        responsive: true,
+        indexAxis: 'y',
+        scales: {
+            x: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

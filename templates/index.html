@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - HR Management System{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">
+            <i class="fas fa-users-cog"></i> HR Management System
+        </h1>
+        <p class="hero-subtitle">Smart Recruitment, Simplified.</p>
+        <p class="lead mb-4">
+            Streamline your recruitment process with AI-powered candidate matching,
+            comprehensive analytics, and seamless communication tools.
+        </p>
+        <div class="mt-4">
+            <a href="{{ url_for('login') }}" class="btn btn-light btn-lg me-3">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-user-plus"></i> Register
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-robot fa-4x" style="color: var(--crimson);"></i>
+                    </div>
+                    <h5 class="card-title">Smart Matching</h5>
+                    <p class="card-text">
+                        AI-powered ranking algorithm matches candidates to job requirements
+                        based on skills, CGPA, and branch relevance.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-chart-line fa-4x" style="color: var(--crimson);"></i>
+                    </div>
+                    <h5 class="card-title">Advanced Analytics</h5>
+                    <p class="card-text">
+                        Comprehensive dashboards with visual insights into student data,
+                        recruitment trends, and performance metrics.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card text-center h-100">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <i class="fas fa-envelope fa-4x" style="color: var(--crimson);"></i>
+                    </div>
+                    <h5 class="card-title">Email Notifications</h5>
+                    <p class="card-text">
+                        Automated email notifications keep candidates and recruiters
+                        informed throughout the selection process.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-user-tie"></i> For HR Professionals
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Manage student database</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Upload and organize resumes</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> View recruiter job requests</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Export candidate lists</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Track recruitment analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-briefcase"></i> For Recruiters
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Post job requirements</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> View ranked candidate lists</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> AI-powered fit scores</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Send email notifications</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Track job postings</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

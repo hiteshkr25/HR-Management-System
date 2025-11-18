@@ -1,0 +1,227 @@
+:root {
+    --crimson: #DC143C;
+    --crimson-dark: #A0102A;
+    --crimson-light: #FF6B8A;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-800: #343a40;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--gray-100);
+    min-height: 100vh;
+}
+
+.navbar {
+    background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: white !important;
+}
+
+.navbar-nav .nav-link {
+    color: rgba(255,255,255,0.9) !important;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+.btn-crimson {
+    background-color: var(--crimson);
+    border-color: var(--crimson);
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-crimson:hover {
+    background-color: var(--crimson-dark);
+    border-color: var(--crimson-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 20, 60, 0.3);
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: all 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    transform: translateY(-4px);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+    color: white;
+    font-weight: 600;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 1rem 1.5rem;
+}
+
+.stat-card {
+    border-left: 4px solid var(--crimson);
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--crimson);
+}
+
+.stat-label {
+    color: var(--gray-800);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.5px;
+}
+
+.table th {
+    background-color: var(--crimson);
+    color: white;
+    font-weight: 600;
+    border: none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(220, 20, 60, 0.05);
+}
+
+.badge-crimson {
+    background-color: var(--crimson);
+    color: white;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    opacity: 0.95;
+    margin-bottom: 2rem;
+}
+
+.form-control:focus {
+    border-color: var(--crimson);
+    box-shadow: 0 0 0 0.2rem rgba(220, 20, 60, 0.25);
+}
+
+.footer {
+    background-color: var(--gray-800);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+.notification-badge {
+    background-color: #ff4444;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+}
+
+.fit-score {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--crimson);
+}
+
+.fit-score-high {
+    color: #28a745;
+}
+
+.fit-score-medium {
+    color: #ffc107;
+}
+
+.fit-score-low {
+    color: #dc3545;
+}
+
+.skill-badge {
+    background-color: var(--crimson-light);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin: 2px;
+    display: inline-block;
+}
+
+.alert {
+    border-radius: 8px;
+    border: none;
+}
+
+.page-header {
+    background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.sidebar {
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.sidebar-link {
+    color: var(--gray-800);
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    display: block;
+    border-radius: 8px;
+    transition: all 0.3s;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-link:hover {
+    background-color: var(--crimson);
+    color: white;
+    transform: translateX(5px);
+}
+
+.sidebar-link.active {
+    background-color: var(--crimson);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+    }
+}

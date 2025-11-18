@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}My Jobs - HR Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2><i class="fas fa-briefcase"></i> My Job Postings</h2>
+                <p class="mb-0">Manage your job postings</p>
+            </div>
+            <a href="{{ url_for('recruiter_post_job') }}" class="btn btn-light btn-lg">
+                <i class="fas fa-plus-circle"></i> Post New Job
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for job in jobs %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ job.company_name }}</h5>
+                        <small class="text-white-50">Posted: {{ job.created_at.strftime('%Y-%m-%d') }}</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p><strong>Required Skills:</strong></p>
+                    <div class="mb-2">
+                        {% for skill in job.required_skills.split(',')[:5] %}
+                            <span class="skill-badge">{{ skill.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                    <p><strong>Minimum CGPA:</strong> {{ job.min_cgpa }}</p>
+                    <p><strong>Branch Preference:</strong> 
+                        <span class="badge bg-secondary">{{ job.branch_pref or 'Any' }}</span>
+                    </p>
+                    <p><strong>Description:</strong></p>
+                    <p class="text-muted">{{ job.description[:150] }}{% if job.description|length > 150 %}...{% endif %}</p>
+                    <div class="d-grid">
+                        <a href="{{ url_for('recruiter_shortlist', job_id=job.job_id) }}" class="btn btn-crimson">
+                            <i class="fas fa-list-ol"></i> View Shortlist
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not jobs %}
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle"></i> You haven't posted any jobs yet. Create your first job posting!
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
